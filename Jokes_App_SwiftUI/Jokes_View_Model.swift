@@ -1,0 +1,31 @@
+//
+//  Jokes_View_Model.swift
+//  Jokes_App_SwiftUI
+//
+//  Created by Asya Güney on 13.12.2023.
+//
+
+import Foundation
+import Alamofire
+
+class JokesViewModel: ObservableObject {
+   @Published var jokes = [Value]()
+    
+    init(){
+        getJokes()
+    }
+    
+    func getJokes(count: Int = 6){
+        AF.request("http://api.icndb.com/jokes/random/\(count)",method: .get).responseDecodable(of: Welcome.self) { response in
+            switch response.result {
+            case .success(let data):
+                let value = data.value
+                self.jokes += value
+            case .failure(let error):
+                print(error)
+            }
+        }
+        }
+    }
+    
+
